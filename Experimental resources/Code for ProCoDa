@@ -1,0 +1,64 @@
+# UPFLOW VELOCITY 
+# Diameter of reactor tube
+D = 1 * u.inch
+# Area of reactor tube
+A = ac.area_circle(D)
+# Input upflow velocity
+v_up = 1 * u.mm/u.s
+# Flow rate into reactor
+Qr = (A*v_up).to(u.mL/u.s)
+print("The water flow is" ,Qr)
+# Height of reactor
+H_reactor = 50 * u.inch
+# Volume of reactor
+def volume (D, H_reactor):
+  return (m.pi * (D**2)*H_reactor/4).to(u.mL)
+V = volume (D, H_reactor)
+print("The volume of reactor is" ,V)
+# Residence time in reactor
+TR = (V/Qr).to(u.min)
+print("The residence time in reactor is" ,TR)
+#PACl
+# Concentration of PACl stock 
+CPACl_stock = 5000*u.mg/u.L
+# Input concentration of PACl in the reactor 
+CPACl_reactor = 8 * u.mg/u.L
+# Coagulant microtubing (blue-yellow)
+tube = 0.173 * u.mL/u.revolutions
+# Flow rate of PACl in mL/s
+Q_PACl_stock = Qr * (CPACl_reactor/CPACl_stock)
+print("The flow rate of PACl to set into ProCoDa is:" + str(Q_PACl_stock))
+Q_PACl_stock_rpm = (Q_PACl_stock/tube)*60 * u.s/u.min
+print("PACl in rpm is:" + str(Q_PACl_stock_rpm))
+# Humic Acid
+# Concentration  of humic acid stock 
+C_HA_stock = 1000 * u.mg/u.L
+# Input concentration of humic acid in the reactor 
+C_HA_reactor =  8 * u.mg/u.L
+# Humic acid microtubing (blue-yellow)
+tube = 0.173 * u.mL/u.revolutions 
+# Flow rate of PACl in mL/s
+Q_HA_stock = Qr*(C_HA_reactor/C_HA_stock)
+print("The flow rate of humic acid to set in ProCoDa is:" +str(Q_HA_stock))
+# Flow rate of humic acid in RPM 
+Q_HA_stock_rpm = (Q_HA_stock/tube)*60 * u.s/u.min
+print("Humic acid pump should be set at:" +str(Q_HA_stock_rpm))
+# Powdered Activated Carbon (PAC)
+# Concentration of PAC stock
+C_PAC_stock = 5000*u.mg/u.L
+# Input concentration of PAC in the reactor
+C_PAC_reactor = 10 * u.mg/u.L
+# PAC microtubing (blue-yellow)
+tube = 0.173 * u.mL/u.revolutions
+# Flow rate of PAC in mL/s
+Q_PAC_stock = Qr*(C_PAC_reactor/C_PAC_stock)
+print("PAC should be set in ProCoDa to:" + str(Q_PAC_stock))
+Q_PAC_stock_rpm = (Q_PAC_stock/tube)*60 * u.s/u.min
+print("PAC in rpm is:" + str(Q_PAC_stock_rpm))
+# Water
+# Flow rate of water in mL/s
+Q_tap = Qr - 1*Q_PACl_stock - 1*Q_HA_stock - 1*Q_PAC_stock
+print("Water should be set in ProCoDa to:" +str(Q_tap))
+water_tube = .875 * u.mL/u.revolutions
+Q_tap_rpm = (Q_tap/water_tube)*60*u.s/u.min
+print("Water in rpm should be:" +str(Q_tap_rpm))
